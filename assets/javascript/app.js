@@ -1,12 +1,4 @@
 
-// Defining the function that reloads the page
-// function refreshPage() {
-//     location.reload();
-// };
-// Reloads page every minute
-// setTimeout(refreshPage, 60 * 1000);
-
-
 // Your web app's Firebase configuration
 var firebaseConfig = {
     apiKey: "AIzaSyBWyrfmsUfEDHPqVsp9RO4KPLhJwOq5Rvg",
@@ -55,7 +47,7 @@ $("#submitButton").click(function () {
 });
 
 // Firebase watcher + initial loader HINT: This code behaves similarly to .on("value")
-database.ref().on("child_added", function(childSnapshot) {
+database.ref().on("child_added", function (childSnapshot) {
 
     // Log everything that's coming out of snapshot
     console.log(childSnapshot.val().dbname);
@@ -72,16 +64,21 @@ database.ref().on("child_added", function(childSnapshot) {
     console.log("First Arrival: " + newFirstTime);
     console.log("Frequency: " + newFrequency);
 
+    // The only thing that's left is to capture and do the train math via Moment.js, but my brain is broken at this hour of night and I can't quite handle it right now.
 
+    var momentNewfirsttime = moment(newFirstTime).format("HH:mm");
+    console.log("Moment-Converted First Train Time: " + momentNewfirsttime);
 
+    var currentTime = moment().format("HH:mm");
+    console.log("Moment-Converted Current Time: " + currentTime);
 
-
+    // This is the section that adds the table row that we want. Can't get Moment.js to format the entry at this time.
 
     var newTablerow = $("<tr>").append(
         $("<td>").text(newName),
         $("<td>").text(newDestination),
-        $("<td>").text(newFirstTime),
         $("<td>").text(newFrequency),
+        $("<td>").text("Next Arrival Time"),
         $("<td>").text("Some number of minutes away"),
         $("<button id='emptybutton'>").text("Clear"),
 
@@ -89,14 +86,13 @@ database.ref().on("child_added", function(childSnapshot) {
 
     $(".table").append(newTablerow);
 
-    // Click handler for the empty button
 
-    $(document).on("click", function () {
-        event.preventDefault();
-        console.log("Clear button clicked!");
-        $(this).closest('tr').remove();
-    });
+
 });
 
-
-
+// Click handler for the empty button - can't actually get it to clear but I think it would look something like this!
+$("#emptybutton").click(function () {
+    event.preventDefault();
+    console.log("Clear button clicked!");
+    // Not actually sure how to clear the table data, haha!
+});
