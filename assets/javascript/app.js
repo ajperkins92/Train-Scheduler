@@ -74,10 +74,9 @@ database.ref().on("child_added", function (childSnapshot) {
     // Calculate Time Difference
     var timeDifference = moment().diff(moment(momentArrivalTime),"minutes");
 
+    // Needed help for this section - doesn't work exactly how we want it 
     var timeSubtract = timeDifference % newFrequency;
-
     var untilArrival = newFrequency - timeSubtract;
-
     var arrivalAt = moment().add(untilArrival, "minutes");
 
     // This is the section that adds the table row that we want. Can't get Moment.js to format the entry at this time.
