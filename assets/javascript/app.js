@@ -64,13 +64,21 @@ database.ref().on("child_added", function (childSnapshot) {
     console.log("First Arrival: " + newFirstTime);
     console.log("Frequency: " + newFrequency);
 
-    // The only thing that's left is to capture and do the train math via Moment.js, but my brain is broken at this hour of night and I can't quite handle it right now.
 
-    var momentNewfirsttime = moment(newFirstTime).format("HH:mm");
-    console.log("Moment-Converted First Train Time: " + momentNewfirsttime);
+    // Current Time variable
+    var currentTime = moment();
 
-    var currentTime = moment().format("HH:mm");
-    console.log("Moment-Converted Current Time: " + currentTime);
+    // Capture newFirstTime and convert into moment
+    var momentArrivalTime = moment(newFirstTime, "MM/DD/YYYY:HH:mm").subtract(1,"years");
+    
+    // Calculate Time Difference
+    var timeDifference = moment().diff(moment(momentArrivalTime),"minutes");
+
+    var timeSubtract = timeDifference % newFrequency;
+
+    var untilArrival = newFrequency - timeSubtract;
+
+    var arrivalAt = moment().add(untilArrival, "minutes");
 
     // This is the section that adds the table row that we want. Can't get Moment.js to format the entry at this time.
 
@@ -78,8 +86,8 @@ database.ref().on("child_added", function (childSnapshot) {
         $("<td>").text(newName),
         $("<td>").text(newDestination),
         $("<td>").text(newFrequency),
-        $("<td>").text("Next Arrival Time"),
-        $("<td>").text("Some number of minutes away"),
+        $("<td>").text(arrivalAt),
+        $("<td>").text(untilArrival),
         $("<button id='emptybutton'>").text("Clear"),
 
     )
